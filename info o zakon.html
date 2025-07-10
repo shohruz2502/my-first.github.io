@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справочник по законодательству РФ для мигрантов</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .book-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .question-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .question-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-left: 5px solid #0ff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+        
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        
+        .option {
+            padding: 8px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .option.correct {
+            background-color: rgba(0, 255, 0, 0.1);
+            border: 1px solid #0f0;
+            box-shadow: 0 0 10px #0f0;
+            color: #0f0;
+        }
+        
+        .option.incorrect {
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 1px solid #f00;
+            color: #f00;
+        }
+        
+        .option::before {
+            content: "• ";
+            font-weight: bold;
+        }
+        
+        .explanation {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 0, 0.1);
+            border-radius: 5px;
+            color: #ff0;
+            border-left: 3px solid #ff0;
+        }
+        
+        .add-question-form {
+            margin: 40px 0;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            border: 1px dashed #0ff;
+        }
+        
+        .form-title {
+            color: #0ff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #0ff;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #0ff;
+            border-radius: 5px;
+            color: #fff;
+        }
+        
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .option-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .option-input input[type="text"] {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .option-input input[type="radio"] {
+            accent-color: #0ff;
+        }
+        
+        .add-option-btn, .add-question-btn {
+            background-color: rgba(0, 255, 255, 0.2);
+            color: #0ff;
+            border: 1px solid #0ff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .add-option-btn:hover, .add-question-btn:hover {
+            background-color: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 10px #0ff;
+        }
+        
+        .add-question-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-weight: bold;
+        }
+        
+        .page-footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #ff0;
+            text-shadow: 0 0 5px #ff0;
+        }
+        
+        .neon-blue {
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+        
+        .neon-red {
+            color: #f00;
+            text-shadow: 0 0 5px #f00;
+        }
+        
+        .neon-yellow {
+            color: #ff0;
+            text-shadow: 0 0 5px #ff0;
+        }
+        
+        .section-title {
+            border-bottom: 2px solid #0ff;
+            padding-bottom: 10px;
+            margin: 30px 0 20px;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+
+        .back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 10px 15px;
+        background-color: rgba(0, 255, 255, 0.2);
+        color: #0ff;
+        border: 1px solid #0ff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Arial', sans-serif;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: rgba(0, 255, 255, 0.4);
+        box-shadow: 0 0 10px #0ff;
+    }
+    </style>
+</head>
+<body>
+<a href="main.html" class="back-button">← Назад</a>
+    <div class="book-container">
+        <h1 class="neon-blue">Справочник по законодательству РФ для мигрантов</h1>
+        
+        <div id="content-container">
+            <!-- Контент будет загружен через JavaScript -->
+        </div>
+        
+        <div class="add-question-form">
+            <h3 class="form-title neon-blue">Добавить новый вопрос</h3>
+            <div class="form-group">
+                <label for="new-question">Вопрос:</label>
+                <input type="text" id="new-question" placeholder="Введите текст вопроса">
+            </div>
+            
+            <div class="form-group">
+                <label>Варианты ответов:</label>
+                <div id="options-container">
+                    <!-- Варианты ответов будут добавляться здесь -->
+                </div>
+                <button class="add-option-btn neon-yellow" id="add-option-btn">+ Добавить вариант</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="explanation">Пояснение (необязательно):</label>
+                <textarea id="explanation" placeholder="Дополнительное пояснение к правильному ответу"></textarea>
+            </div>
+            
+            <button class="add-question-btn neon-blue" id="add-question-btn">Добавить вопрос в справочник</button>
+        </div>
+        
+        <div class="page-footer neon-yellow">
+            © 2023 Справочник для мигрантов. Все права защищены.
+        </div>
+    </div>
+
+    <script>
+        // База вопросов по законодательству РФ
+        let questions = [
+            {
+                question: "Какой срок действия у патента на работу в РФ?",
+                options: ["1 месяц", "1 год", "3 года", "5 лет"],
+                correct: 1
+            },
+            {
+                question: "В течение скольких дней нужно встать на миграционный учет?",
+                options: ["3 дня", "7 дней", "15 дней", "30 дней"],
+                correct: 1
+            },
+            {
+                question: "Какой налог платят мигранты за патент?",
+                options: ["НДФЛ", "Пенсионные взносы", "Фиксированный авансовый платеж", "НДС"],
+                correct: 2
+            },
+            {
+                question: "Какое наказание за работу без патента?",
+                options: ["Штраф", "Департация", "Запрет на въезд", "Все варианты верны"],
+                correct: 3
+            },
+            {
+                question: "Как часто нужно продлевать патент?",
+                options: ["Ежемесячно", "Раз в полгода", "Ежегодно", "Только при смене работы"],
+                correct: 0
+            },
+            {
+                question: "Какие документы нужны для оформления патента?",
+                options: ["Паспорт и миграционная карта", "Диплом об образовании", "Трудовая книжка", "Все перечисленное"],
+                correct: 0
+            },
+            {
+                question: "Максимальный срок временного пребывания мигранта в РФ?",
+                options: ["90 дней", "180 дней", "1 год", "Нет ограничений"],
+                correct: 0
+            },
+            {
+                question: "Куда обращаться для оформления патента?",
+                options: ["МФЦ", "Миграционный центр", "УВМ МВД", "Все варианты верны"],
+                correct: 3
+            },
+            {
+                question: "Минимальный срок действия медицинской страховки для патента?",
+                options: ["1 месяц", "3 месяца", "6 месяцев", "1 год"],
+                correct: 0
+            },
+            {
+                question: "При какой сумме долга по налогам аннулируется патент?",
+                options: ["1000 руб", "5000 руб", "10000 руб", "Любая сумма долга"],
+                correct: 3
+            },
+            {
+    question: "Какой орган контролирует исполнение полицией законов?",
+    options: ["Прокуратура", "Суд", "Администрация Президента", "ФСБ"],
+    correct: 0
+},
+{
+    question: "Ведение незаконной трудовой деятельности без разрешения на работу в РФ...",
+    options: ["Разрешено в течение 30 дней", "Запрещено и наказывается штрафом", "Разрешено для граждан СНГ", "Требует только уведомления"],
+    correct: 1
+},
+{
+    question: "Срок временного пребывания иностранного гражданина без визы составляет...",
+    options: ["30 дней", "90 дней", "180 дней", "1 год"],
+    correct: 1
+},
+{
+    question: "Срок действия миграционной карты?",
+    options: ["7 дней", "30 дней", "90 дней", "Совпадает со сроком визы или безвизового пребывания"],
+    correct: 3
+},
+{
+    question: "В течение скольких рабочих дней нужно встать на миграционный учет в РФ по месту прибывания?",
+    options: ["3 дня", "7 дней", "15 дней", "30 дней"],
+    correct: 1
+},
+{
+    question: "Какой орган принимает решение о выдворении иностранного гражданина?",
+    options: ["Полиция", "Прокуратура", "Суд", "ФМС"],
+    correct: 2
+},
+{
+    question: "Супруги хотят развестись. Они могут это сделать...",
+    options: ["Только в стране гражданства", "В ЗАГСе или суде РФ", "Только через консульство", "Только при согласии миграционной службы"],
+    correct: 1
+},
+{
+    question: "Если иностранный гражданин, работающий по патенту, осуществляет трудовую деятельность с привлечением третьих лиц, то патент...",
+    options: ["Действует как обычно", "Требует переоформления", "Аннулируется", "Разрешает работу только основному владельцу"],
+    correct: 2
+},
+{
+    question: "Какую окраску имеет флаг России?",
+    options: ["Красный, синий, белый", "Белый, синий, красный", "Красный, белый, синий", "Синий, белый, красный"],
+    correct: 1
+},
+{
+    question: "Статья 62 Конституции РФ определяет, что иностранные граждане...",
+    options: [
+        "Имеют те же права, что и граждане РФ",
+        "Имеют права и несут обязанности наравне с гражданами РФ, кроме исключений",
+        "Не имеют прав на территории РФ",
+        "Могут получить гражданство автоматически"
+    ],
+    correct: 1
+},
+{
+    question: "Где происходит регистрация брака в Российской Федерации?",
+    options: ["В суде", "В отделе ЗАГС", "В полиции", "В миграционной службе"],
+    correct: 1
+},
+{
+    question: "Куда должен обратиться иностранный гражданин, если против него совершено преступление?",
+    options: ["В полицию", "В посольство своей страны", "В миграционную службу", "В суд"],
+    correct: 0
+},
+{
+    question: "Для постановки на учёт по месту пребывания иностранный гражданин должен иметь:",
+    options: ["Только миграционную карту", "Только паспорт", "Паспорт и миграционную карту", "Патент на работу"],
+    correct: 2
+},
+{
+    question: "Если иностранный гражданин нарушил правила постановки на миграционный учёт, он привлекается к:",
+    options: ["Дисциплинарной ответственности", "Уголовной ответственности", "Административной ответственности", "Гражданской ответственности"],
+    correct: 2
+},
+{
+    question: "Административное выдворение за пределы РФ назначается:",
+    options: ["Полицией", "Прокурором", "Судьёй", "Миграционной службой"],
+    correct: 2
+},
+{
+    question: "Какой документ является главным удостоверением личности в РФ?",
+    options: ["Патент", "Миграционная карта", "Паспорт", "Водительские права"],
+    correct: 2
+},
+{
+    question: "В какой срок выдается патент после положительного решения?",
+    options: ["3 рабочих дня", "7 рабочих дней", "10 рабочих дней", "15 рабочих дней"],
+    correct: 0
+},
+{
+    question: "Максимальный срок действия патента с учетом продления:",
+    options: ["3 месяца", "12 месяцев", "18 месяцев", "24 месяца"],
+    correct: 1
+},
+{
+    question: "Могут ли иностранцы свободно передвигаться по России?",
+    options: ["Да, без ограничений", "Нет", "Только в пределах региона регистрации", "Только с разрешения миграционной службы"],
+    correct: 0
+},
+{
+    question: "Основание для трудовой деятельности иностранца в РФ:",
+    options: [
+        "Наличие трудового договора",
+        "Приглашение работодателя",
+        "Квоты Правительства РФ",
+        "Все перечисленные"
+    ],
+    correct: 3
+},
+{
+    question: "Какой кодекс регулирует ответственность за преступления в РФ?",
+    options: ["Гражданский кодекс", "Уголовный кодекс", "Трудовой кодекс", "Кодекс об административных правонарушениях"],
+    correct: 1
+},
+{
+    question: "Какое право гарантирует Конституция РФ иностранным гражданам?",
+    options: [
+        "Знакомиться с документами, затрагивающими их права",
+        "Избираться в органы власти",
+        "Получать все виды пособий",
+        "Занимать государственные должности"
+    ],
+    correct: 0
+},
+{
+    question: "Что делать при потере паспорта?",
+    options: [
+        "Обратиться в полицию и консульство",
+        "Подать заявление в суд",
+        "Уведомить работодателя",
+        "Ничего, можно работать по миграционной карте"
+    ],
+    correct: 0
+},
+{
+    question: "Срок подачи документов для получения патента:",
+    options: ["10 дней", "20 дней", "30 дней", "60 дней"],
+    correct: 2
+},
+{
+    question: "Иностранный гражданин обязан покинуть РФ по истечении:",
+    options: [
+        "Срока действия визы/миграционной карты",
+        "90 дней пребывания",
+        "Срока действия патента",
+        "Все варианты верны"
+    ],
+    correct: 3
+},
+{
+    question: "Какое наказание за работу без патента?",
+    options: ["Штраф", "Депортация", "Запрет на въезд", "Все варианты верны"],
+    correct: 3
+},
+{
+    question: "Минимальный срок действия медицинской страховки для патента:",
+    options: ["1 месяц", "3 месяца", "6 месяцев", "1 год"],
+    correct: 0
+},
+{
+    question: "При какой сумме долга по налогам аннулируется патент?",
+    options: ["1000 руб.", "5000 руб.", "10000 руб.", "Любая сумма долга"],
+    correct: 3
+},
+{
+    question: "Куда обращаться для оформления патента?",
+    options: ["МФЦ", "Миграционный центр", "УВМ МВД", "Все варианты верны"],
+    correct: 3
+},
+{
+    question: "Какой документ подтверждает право на работу в РФ?",
+    options: ["Миграционная карта", "Патент", "Регистрация", "Медицинская страховка"],
+    correct: 1
+},
+{
+    question: "Сколько дней можно работать без патента после въезда?",
+    options: ["0 дней", "15 дней", "30 дней", "90 дней"],
+    correct: 0
+},
+{
+    question: "Какой орган выдает патенты?",
+    options: ["Полиция", "ФМС", "УВМ МВД", "Центр занятости"],
+    correct: 2
+},
+{
+    question: "Можно ли продлить патент?",
+    options: ["Да, неограниченное число раз", "Да, но не более 12 месяцев суммарно", "Нет", "Только один раз"],
+    correct: 1
+},
+{
+    question: "Какие документы нужны для патента?",
+    options: [
+        "Паспорт и миграционная карта",
+        "Фото и медицинская справка",
+        "Квитанция об оплате налога",
+        "Все перечисленные"
+    ],
+    correct: 3
+},
+{
+    question: "Какой срок действия у первоначального патента?",
+    options: ["1 месяц", "3 месяца", "6 месяцев", "1 год"],
+    correct: 0
+},
+{
+    question: "Нужно ли уведомлять о смене работы?",
+    options: ["Да, в течение 7 дней", "Да, в течение 30 дней", "Нет", "Только при смене профессии"],
+    correct: 0
+},
+{
+    question: "Можно ли работать в другом регионе по патенту?",
+    options: ["Да, без ограничений", "Нет", "Только с разрешения миграционной службы", "Только в соседних регионах"],
+    correct: 1
+},
+{
+    question: "Какой налог платят за патент?",
+    options: ["НДФЛ", "Фиксированный авансовый платеж", "НДС", "Пенсионные взносы"],
+    correct: 1
+},
+{
+    question: "Сколько стоит продление патента?",
+    options: ["Та же сумма, что и за оформление", "Половина первоначальной суммы", "Зависит от региона", "Бесплатно"],
+    correct: 0
+},
+{
+    question: "Нужен ли патент высококвалифицированным специалистам?",
+    options: ["Да", "Нет", "Только в первые 3 месяца", "Только если зарплата меньше 150 тыс. руб."],
+    correct: 1
+},
+{
+    question: "Можно ли получить патент без знания русского языка?",
+    options: ["Да", "Нет", "Только для граждан СНГ", "Только при наличии диплома"],
+    correct: 1
+},
+{
+    question: "Какой срок действия у сертификата о знании русского языка?",
+    options: ["1 год", "3 года", "5 лет", "Бессрочно"],
+    correct: 2
+},
+{
+    question: "Кто освобожден от сдачи экзамена на патент?",
+    options: [
+        "Белорусы",
+        "Высококвалифицированные специалисты",
+        "Носители русского языка",
+        "Все перечисленные"
+    ],
+    correct: 3
+},
+{
+    question: "Сколько стоит экзамен на патент?",
+    options: ["2000 руб.", "3800 руб.", "5000 руб.", "Зависит от региона"],
+    correct: 1
+},
+{
+    question: "Можно ли пересдать экзамен на патент?",
+    options: ["Да, через 30 дней", "Да, через 3 месяца", "Нет", "Только один раз"],
+    correct: 0
+},
+{
+    question: "Какой документ не нужен для сдачи экзамена?",
+    options: ["Паспорт", "Миграционная карта", "Диплом об образовании", "Регистрация"],
+    correct: 2
+},
+{
+    question: "Сколько вопросов в тесте по законодательству?",
+    options: ["5", "10", "20", "30"],
+    correct: 1
+},
+{
+    question: "Какой минимальный процент для сдачи экзамена?",
+    options: ["50%", "60%", "65%", "70%"],
+    correct: 2
+},
+{
+    question: "Можно ли работать без патента, если есть РВП?",
+    options: ["Да", "Нет", "Только у юридических лиц", "Только в своем регионе"],
+    correct: 0
+},
+{
+    question: "Какой срок действия у миграционного учета?",
+    options: ["90 дней", "1 год", "Совпадает с регистрацией", "Неограничен"],
+    correct: 2
+},
+{
+    question: "Нужно ли уведомлять о смене адреса проживания?",
+    options: ["Да, в течение 7 дней", "Да, в течение 15 дней", "Нет", "Только при смене региона"],
+    correct: 0
+},
+{
+    question: "Какое наказание за просрочку миграционного учета?",
+    options: ["Штраф до 5000 руб.", "Депортация", "Запрет на въезд", "Все варианты верны"],
+    correct: 3
+},
+{
+    question: "Можно ли получить патент с судимостью?",
+    options: ["Да", "Нет", "Только за мелкие правонарушения", "Только если судимость погашена"],
+    correct: 1
+},
+{
+    question: "Какой документ подтверждает постановку на миграционный учет?",
+    options: ["Отрывная часть уведомления", "Штамп в паспорте", "Справка из МФЦ", "Миграционная карта"],
+    correct: 0
+}
+        ];
+
+        // Функция для отображения вопросов
+        function displayQuestions() {
+            const container = document.getElementById('content-container');
+            container.innerHTML = '';
+            
+            // Создаем разделы
+            const sections = [
+                { title: "Патент на работу", questions: questions }
+            ];
+            
+            sections.forEach(section => {
+                const sectionElement = document.createElement('div');
+                const titleElement = document.createElement('h2');
+                titleElement.className = 'section-title neon-blue';
+                titleElement.textContent = section.title;
+                sectionElement.appendChild(titleElement);
+                
+                const listElement = document.createElement('ol');
+                listElement.className = 'question-list';
+                
+                section.questions.forEach((q, index) => {
+                    const itemElement = document.createElement('li');
+                    itemElement.className = 'question-item';
+                    
+                    const questionElement = document.createElement('div');
+                    questionElement.className = 'question-text';
+                    questionElement.textContent = `${index + 1}. ${q.question}`;
+                    itemElement.appendChild(questionElement);
+                    
+                    const optionsList = document.createElement('ul');
+                    optionsList.className = 'options-list';
+                    
+                    q.options.forEach((option, optIndex) => {
+                        const optionElement = document.createElement('li');
+                        optionElement.className = `option ${optIndex === q.correct ? 'correct' : 'incorrect'}`;
+                        optionElement.textContent = option;
+                        optionsList.appendChild(optionElement);
+                    });
+                    
+                    itemElement.appendChild(optionsList);
+                    
+                    if (q.explanation) {
+                        const explanationElement = document.createElement('span');
+                        explanationElement.className = 'explanation neon-yellow';
+                        explanationElement.textContent = `Пояснение: ${q.explanation}`;
+                        itemElement.appendChild(explanationElement);
+                    }
+                    
+                    listElement.appendChild(itemElement);
+                });
+                
+                sectionElement.appendChild(listElement);
+                container.appendChild(sectionElement);
+            });
+        }
+
+        // Функция для добавления нового вопроса
+        function addNewQuestion() {
+            const questionText = document.getElementById('new-question').value.trim();
+            const explanationText = document.getElementById('explanation').value.trim();
+            
+            if (!questionText) {
+                alert('Пожалуйста, введите текст вопроса');
+                return;
+            }
+            
+            const optionInputs = document.querySelectorAll('.option-input input[type="text"]');
+            const options = [];
+            let correctIndex = -1;
+            
+            optionInputs.forEach((input, index) => {
+                const value = input.value.trim();
+                if (value) {
+                    options.push(value);
+                    
+                    const radio = input.parentElement.querySelector('input[type="radio"]');
+                    if (radio.checked) {
+                        correctIndex = index;
+                    }
+                }
+            });
+            
+            if (options.length < 2) {
+                alert('Добавьте как минимум 2 варианта ответа');
+                return;
+            }
+            
+            if (correctIndex === -1) {
+                alert('Укажите правильный вариант ответа');
+                return;
+            }
+            
+            // Добавляем новый вопрос
+            questions.push({
+                question: questionText,
+                options: options,
+                correct: correctIndex,
+                explanation: explanationText || undefined
+            });
+            
+            // Очищаем форму
+            document.getElementById('new-question').value = '';
+            document.getElementById('explanation').value = '';
+            document.getElementById('options-container').innerHTML = '';
+            
+            // Обновляем отображение
+            displayQuestions();
+            
+            // Прокручиваем к новому вопросу
+            window.scrollTo(0, 0);
+        }
+
+        // Функция для добавления поля варианта ответа
+        function addOptionField() {
+            const optionsContainer = document.getElementById('options-container');
+            const optionIndex = optionsContainer.children.length;
+            
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option-input';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = `Вариант ответа ${optionIndex + 1}`;
+            
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'correct-option';
+            
+            optionDiv.appendChild(input);
+            optionDiv.appendChild(radio);
+            optionDiv.appendChild(document.createTextNode(' Правильный'));
+            
+            optionsContainer.appendChild(optionDiv);
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            displayQuestions();
+            
+            // Добавляем 2 пустых варианта ответа по умолчанию
+            addOptionField();
+            addOptionField();
+            
+            // Назначаем обработчики событий
+            document.getElementById('add-option-btn').addEventListener('click', addOptionField);
+            document.getElementById('add-question-btn').addEventListener('click', addNewQuestion);
+        });
+    </script>
+</body>
+</html>

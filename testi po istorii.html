@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по истории России для мигрантов</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #1a2a6c;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+        }
+        
+        .question-container {
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #b21f1f;
+            min-height: 200px;
+        }
+        
+        .question-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background-color: #d1d7dc;
+        }
+        
+        .option.selected {
+            background-color: #1a2a6c;
+            color: white;
+            border-color: #b21f1f;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #1a2a6c, #3a4a8c);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 42, 108, 0.3);
+        }
+        
+        .btn-skip {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+        }
+        
+        .btn-skip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #b21f1f, #d23030);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(178, 31, 31, 0.3);
+        }
+        
+        .progress-container {
+            margin-bottom: 25px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .progress-text {
+            text-align: right;
+            color: #6c757d;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 10px 15px;
+        background-color: rgba(0, 255, 255, 0.2);
+        color: #0ff;
+        border: 1px solid #0ff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Arial', sans-serif;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: rgba(0, 255, 255, 0.4);
+        box-shadow: 0 0 10px #0ff;
+    }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="main.html" class="back-button">← Назад</a>
+    <div class="container">
+        <h1>Тест по истории России для трудовых мигрантов</h1>
+        
+        <div class="progress-container">
+            <div class="progress-text" id="progressText">Вопрос 1 из 10</div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="question-container">
+            <div class="question-text" id="questionText"></div>
+            <div class="options-container" id="optionsContainer"></div>
+        </div>
+        
+        <div class="controls" id="controlsContainer">
+            <button class="btn btn-skip" id="skipBtn">Пропустить</button>
+            <button class="btn btn-next" id="nextBtn" disabled>Далее</button>
+        </div>
+        
+        <button class="btn btn-submit" id="submitBtn" style="display: none;">Завершить тест</button>
+    </div>
+
+    <script>
+        // База вопросов по истории России (60 вопросов)
+        const questions = [
+            {
+                question: "Какой город является столицей России?",
+                options: ["Санкт-Петербург", "Москва", "Новосибирск", "Екатеринбург"],
+                correct: 1
+            },
+            {
+                question: "Кто был первым президентом России?",
+                options: ["Владимир Путин", "Борис Ельцин", "Михаил Горбачёв", "Дмитрий Медведев"],
+                correct: 1
+            },
+            {
+                question: "В каком году распался Советский Союз?",
+                options: ["1985", "1991", "1993", "2000"],
+                correct: 1
+            },
+            {
+                question: "Какой праздник отмечается в России 12 июня?",
+                options: ["День Победы", "День России", "День Конституции", "День Народного Единства"],
+                correct: 1
+            },
+            {
+                question: "Какое озеро является самым глубоким в мире и находится в России?",
+                options: ["Онежское", "Байкал", "Ладожское", "Каспийское море"],
+                correct: 1
+            },
+            {
+                question: "Как называется основной закон России?",
+                options: ["Декларация", "Конституция", "Уложение", "Мандат"],
+                correct: 1
+            },
+            {
+                question: "Какой русский царь прорубил «окно в Европу»?",
+                options: ["Иван Грозный", "Пётр I", "Николай II", "Александр II"],
+                correct: 1
+            },
+            {
+                question: "Какая валюта используется в России?",
+                options: ["Евро", "Доллар", "Рубль", "Тенге"],
+                correct: 2
+            },
+            {
+                question: "Какой город назывался Ленинградом?",
+                options: ["Москва", "Санкт-Петербург", "Волгоград", "Нижний Новгород"],
+                correct: 1
+            },
+            {
+                question: "Кто написал роман «Война и мир»?",
+                options: ["Фёдор Достоевский", "Лев Толстой", "Антон Чехов", "Александр Пушкин"],
+                correct: 1
+            },
+            {
+    question: "В каком году крестили Русь?",
+    options: ["988", "998", "1015", "1054"],
+    correct: 0
+},
+{
+    question: "Кто был первым русским царем?",
+    options: ["Иван III", "Иван IV", "Петр I", "Александр I"],
+    correct: 1
+},
+{
+    question: "Какое событие произошло в 1812 году?",
+    options: ["Отечественная война", "Отмена крепостного права", "Первая мировая война", "Революция"],
+    correct: 0
+},
+{
+    question: "Когда закончилась Великая Отечественная война?",
+    options: ["1943", "1945", "1947", "1950"],
+    correct: 1
+},
+{
+    question: "Как звали первого президента России?",
+    options: ["Михаил Горбачев", "Борис Ельцин", "Владимир Путин", "Дмитрий Медведев"],
+    correct: 1
+},
+{
+    question: "Какая битва была переломной в Великой Отечественной войне?",
+    options: ["Битва за Москву", "Сталинградская битва", "Курская битва", "Битва за Берлин"],
+    correct: 1
+},
+{
+    question: "В каком году распался СССР?",
+    options: ["1985", "1991", "1993", "2000"],
+    correct: 1
+},
+{
+    question: "Какой город был первой столицей Древней Руси?",
+    options: ["Москва", "Киев", "Новгород", "Владимир"],
+    correct: 1
+},
+{
+    question: "Когда была отменена крепостное право в России?",
+    options: ["1762", "1861", "1905", "1917"],
+    correct: 1
+},
+{
+    question: "Какой князь победил шведов в Невской битве?",
+    options: ["Дмитрий Донской", "Александр Невский", "Владимир Мономах", "Ярослав Мудрый"],
+    correct: 1
+},
+{
+    question: "Какой город основал Петр I?",
+    options: ["Москва", "Санкт-Петербург", "Нижний Новгород", "Владивосток"],
+    correct: 1
+},
+{
+    question: "Кто возглавлял Красную Армию в Гражданскую войну?",
+    options: ["Ленин", "Сталин", "Троцкий", "Бухарин"],
+    correct: 2
+},
+{
+    question: "Как называлась первая русская летопись?",
+    options: ["Слово о полку Игореве", "Повесть временных лет", "Русская правда", "Домострой"],
+    correct: 1
+},
+{
+    question: "Когда началась Вторая мировая война?",
+    options: ["1939", "1941", "1945", "1950"],
+    correct: 0
+},
+{
+    question: "Какой царь провел реформы в XVIII веке?",
+    options: ["Иван Грозный", "Петр I", "Екатерина II", "Александр II"],
+    correct: 2
+},
+{
+    question: "Кто был главным противником России в Крымской войне?",
+    options: ["Франция", "Англия", "Турция", "Все варианты верны"],
+    correct: 3
+},
+{
+    question: "Когда была принята Конституция РФ?",
+    options: ["1991", "1993", "2000", "2008"],
+    correct: 1
+},
+{
+    question: "Какой князь объединил русские земли вокруг Москвы?",
+    options: ["Александр Невский", "Иван Калита", "Дмитрий Донской", "Иван III"],
+    correct: 1
+},
+{
+    question: "Когда произошла Куликовская битва?",
+    options: ["1240", "1380", "1480", "1552"],
+    correct: 1
+},
+{
+    question: "Как называлось первое русское государство?",
+    options: ["Московское княжество", "Киевская Русь", "Новгородская республика", "Владимиро-Суздальское княжество"],
+    correct: 1
+},
+{
+    question: "Когда началась Первая мировая война?",
+    options: ["1905", "1914", "1917", "1922"],
+    correct: 1
+},
+{
+    question: "Какой город назывался Ленинградом?",
+    options: ["Москва", "Санкт-Петербург", "Нижний Новгород", "Волгоград"],
+    correct: 1
+},
+{
+    question: "Кто победил в Гражданской войне в России?",
+    options: ["Белые", "Красные", "Зеленые", "Интервенты"],
+    correct: 1
+},
+{
+    question: "Когда был запущен первый искусственный спутник Земли?",
+    options: ["1945", "1957", "1961", "1969"],
+    correct: 1
+},
+{
+    question: "Какой русский ученый открыл периодический закон?",
+    options: ["Ломоносов", "Менделеев", "Павлов", "Циолковский"],
+    correct: 1
+},
+{
+    question: "Когда произошла Октябрьская революция?",
+    options: ["1905", "1917", "1922", "1929"],
+    correct: 1
+},
+{
+    question: "Какой полководец командовал русской армией в 1812 году?",
+    options: ["Суворов", "Кутузов", "Жуков", "Рокоссовский"],
+    correct: 1
+},
+{
+    question: "Когда была основана Москва?",
+    options: ["988", "1147", "1240", "1380"],
+    correct: 1
+},
+{
+    question: "Когда произошло Ледовое побоище?",
+    options: ["1240", "1242", "1380", "1480"],
+    correct: 1
+},
+{
+    question: "Какой город назывался Царицыным?",
+    options: ["Санкт-Петербург", "Волгоград", "Екатеринбург", "Самара"],
+    correct: 1
+},
+{
+    question: "Кто был первым русским патриархом?",
+    options: ["Филарет", "Никон", "Иов", "Тихон"],
+    correct: 2
+},
+{
+    question: "Когда произошло восстание декабристов?",
+    options: ["1801", "1825", "1861", "1905"],
+    correct: 1
+},
+{
+    question: "Какой русский царь ввел опричнину?",
+    options: ["Иван III", "Иван IV", "Петр I", "Павел I"],
+    correct: 1
+},
+{
+    question: "Когда был подписан договор о создании СССР?",
+    options: ["1917", "1922", "1924", "1936"],
+    correct: 1
+},
+{
+    question: "Кто возглавлял СССР во время Второй мировой войны?",
+    options: ["Ленин", "Сталин", "Хрущев", "Брежнев"],
+    correct: 1
+},
+{
+    question: "Как называлась первая русская печатная книга?",
+    options: ["Апостол", "Библия", "Псалтырь", "Евангелие"],
+    correct: 0
+},
+{
+    question: "Когда произошла Бородинская битва?",
+    options: ["1812", "1825", "1853", "1914"],
+    correct: 0
+},
+{
+    question: "Когда началось правление династии Романовых?",
+    options: ["1547", "1613", "1682", "1721"],
+    correct: 1
+},
+{
+    question: "Какой русский ученый первым получил Нобелевскую премию?",
+    options: ["Павлов", "Мечников", "Ландау", "Сахаров"],
+    correct: 0
+},
+{
+    question: "Когда был построен храм Василия Блаженного?",
+    options: ["X век", "XII век", "XVI век", "XVIII век"],
+    correct: 2
+},
+{
+    question: "Когда произошло восстание Пугачева?",
+    options: ["1670", "1773", "1861", "1905"],
+    correct: 1
+},
+{
+    question: "Какой русский полководец не проиграл ни одного сражения?",
+    options: ["Кутузов", "Суворов", "Жуков", "Рокоссовский"],
+    correct: 1
+},
+{
+    question: "Когда был открыт Московский университет?",
+    options: ["1703", "1755", "1801", "1855"],
+    correct: 1
+},
+{
+    question: "Кто был первым русским лауреатом Нобелевской премии по литературе?",
+    options: ["Толстой", "Достоевский", "Бунин", "Пастернак"],
+    correct: 2
+},
+{
+    question: "Когда произошла битва на реке Калке?",
+    options: ["1223", "1240", "1380", "1480"],
+    correct: 0
+},
+{
+    question: "Когда был принят первый пятилетний план в СССР?",
+    options: ["1917", "1921", "1928", "1936"],
+    correct: 2
+},
+{
+    question: "Кто возглавлял Россию во время Смутного времени?",
+    options: ["Борис Годунов", "Михаил Романов", "Дмитрий Пожарский", "Все варианты верны"],
+    correct: 3
+},
+{
+    question: "Когда был основан Санкт-Петербург?",
+    options: ["1613", "1703", "1755", "1812"],
+    correct: 1
+},
+{
+    question: "Какой русский ученый создал теорию космонавтики?",
+    options: ["Королев", "Циолковский", "Гагарин", "Туполев"],
+    correct: 1
+},
+{
+    question: "Когда произошла битва при Полтаве?",
+    options: ["1709", "1755", "1812", "1853"],
+    correct: 0
+},
+{
+    question: "Кто был первым человеком в космосе?",
+    options: ["Гагарин", "Титов", "Леонов", "Терешкова"],
+    correct: 0
+},
+{
+    question: "Когда была принята Декларация о государственном суверенитете России?",
+    options: ["1985", "1990", "1991", "1993"],
+    correct: 1
+},
+{
+    question: "Кто был первым русским лауреатом Нобелевской премии по физиологии?",
+    options: ["Павлов", "Мечников", "Сеченов", "Боткин"],
+    correct: 0
+},
+{
+    question: "Когда был подписан Ясский мирный договор?",
+    options: ["1709", "1791", "1812", "1856"],
+    correct: 1
+},
+{
+    question: "Когда произошло стояние на реке Угре?",
+    options: ["1380", "1480", "1552", "1612"],
+    correct: 1
+},
+{
+    question: "Когда был основан город Владивосток?",
+    options: ["1703", "1780", "1860", "1905"],
+    correct: 2
+},
+{
+    question: "Когда произошло восстание Спартака?",
+    options: ["Это было в Древнем Риме", "1917", "1921", "1941"],
+    correct: 0
+}
+            // Добавьте остальные 50 вопросов...
+        ];
+
+        // Переменные теста
+        let currentQuestionIndex = 0;
+        let selectedQuestions = [];
+        let userAnswers = Array(10).fill(null);
+        const totalQuestions = 10;
+        
+        // Инициализация теста
+        function initTest() {
+            // Выбираем случайные вопросы
+            const shuffled = [...questions].sort(() => 0.5 - Math.random());
+            selectedQuestions = shuffled.slice(0, totalQuestions);
+            
+            // Показываем первый вопрос
+            displayQuestion();
+            
+            // Настройка кнопок
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+            document.getElementById('skipBtn').addEventListener('click', skipQuestion);
+            document.getElementById('submitBtn').addEventListener('click', submitTest);
+        }
+        
+        // Отображение текущего вопроса
+        function displayQuestion() {
+            const question = selectedQuestions[currentQuestionIndex];
+            
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                }
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectAnswer(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Обновление прогресса
+            updateProgress();
+            
+            // Показываем/скрываем кнопки
+            document.getElementById('nextBtn').disabled = userAnswers[currentQuestionIndex] === null;
+            
+            if (currentQuestionIndex === totalQuestions - 1) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+        
+        // Выбор ответа
+        function selectAnswer(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            options[index].classList.add('selected');
+            userAnswers[currentQuestionIndex] = index;
+            document.getElementById('nextBtn').disabled = false;
+        }
+        
+        // Следующий вопрос
+        function nextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        // Пропустить вопрос
+        function skipQuestion() {
+            userAnswers[currentQuestionIndex] = null;
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        // Обновление прогресс-бара
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Вопрос ${currentQuestionIndex + 1} из ${totalQuestions}`;
+        }
+        
+        // Отправка результатов
+        function submitTest() {
+            // Подсчет результатов
+            let correctAnswers = 0;
+            let skippedAnswers = 0;
+            
+            for (let i = 0; i < totalQuestions; i++) {
+                if (userAnswers[i] === null) {
+                    skippedAnswers++;
+                } else if (userAnswers[i] === selectedQuestions[i].correct) {
+                    correctAnswers++;
+                }
+            }
+            
+            // Подготовка данных для передачи
+            const testResults = {
+                testType: "История России",
+                date: new Date().toLocaleString(),
+                correctAnswers: correctAnswers,
+                totalQuestions: totalQuestions,
+                skippedAnswers: skippedAnswers,
+                percentage: Math.round((correctAnswers / totalQuestions) * 100),
+                answers: userAnswers.map((answer, index) => ({
+                    question: selectedQuestions[index].question,
+                    userAnswer: answer !== null ? selectedQuestions[index].options[answer] : "Пропущено",
+                    correctAnswer: selectedQuestions[index].options[selectedQuestions[index].correct],
+                    isCorrect: answer === selectedQuestions[index].correct
+                }))
+            };
+            
+            // Сохраняем результаты в localStorage
+            localStorage.setItem('historyTestResults', JSON.stringify(testResults));
+            
+            // Переход на страницу результатов
+            window.location.href = "o zakoni.html"; // Замените на нужную страницу результатов
+        }
+        
+        // Запуск теста при загрузке страницы
+        document.addEventListener('DOMContentLoaded', initTest);
+    </script>
+</body>
+</html>

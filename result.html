@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты тестирования</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #1a2a6c;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        
+        .result-card {
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-card.passed {
+            border-color: #28a745;
+        }
+        
+        .result-card.failed {
+            border-color: #dc3545;
+        }
+        
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .result-status {
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .passed .result-status {
+            background-color: #d4edda;
+            color: #28a745;
+        }
+        
+        .failed .result-status {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+        
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .detail-item {
+            background-color: #e9ecef;
+            padding: 12px;
+            border-radius: 6px;
+        }
+        
+        .detail-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .progress-circle {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        
+        .circle-bg {
+            fill: none;
+            stroke: #e0e0e0;
+            stroke-width: 8;
+        }
+        
+        .circle-progress {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 1s ease;
+        }
+        
+        .circle-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            fill: #1a2a6c;
+        }
+        
+        .final-result {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        }
+        
+        .final-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .final-passed {
+            color: #28a745;
+        }
+        
+        .final-failed {
+            color: #dc3545;
+        }
+        
+        .final-description {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .btn-restart {
+            background: linear-gradient(135deg, #1a2a6c, #3a4a8c);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px auto 0;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            max-width: 250px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn-restart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(26, 42, 108, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .result-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-title {
+                flex-direction: column;
+            }
+            
+            .result-status {
+                margin-top: 10px;
+                align-self: flex-start;
+            }
+        }
+        
+        .back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 10px 15px;
+        background-color: rgba(0, 255, 255, 0.2);
+        color: #0ff;
+        border: 1px solid #0ff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Arial', sans-serif;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: rgba(0, 255, 255, 0.4);
+        box-shadow: 0 0 10px #0ff;
+    }
+    </style>
+</head>
+<body>
+    <a href="main.html" class="back-button">← Назад</a>
+    <div class="container">
+        <h1>Результаты тестирования</h1>
+        
+        <div id="resultsContainer">
+            <!-- Результаты будут загружены сюда -->
+        </div>
+        
+        <div id="finalResult" class="final-result" style="display: none;">
+            <h2 class="final-title" id="finalTitle"></h2>
+            <p class="final-description" id="finalDescription"></p>
+            <a href="main.html" class="btn-restart">Начать тест заново</a>
+        </div>
+    </div>
+
+    <script>
+        // Получаем результаты из localStorage
+        const russianResults = JSON.parse(localStorage.getItem('russianTestResults') || 'null');
+        const historyResults = JSON.parse(localStorage.getItem('historyTestResults') || 'null');
+        const lawResults = JSON.parse(localStorage.getItem('lawTestResults') || 'null');
+        
+        // Проверяем, что все тесты пройдены
+        if (!russianResults || !historyResults || !lawResults) {
+            alert('Вы прошли не все тесты! Пожалуйста, завершите все три теста.');
+            window.location.href = 'index.html';
+        }
+        
+        // Минимальный процент для успешной сдачи
+        const PASSING_SCORE = 65;
+        
+        // Обрабатываем результаты
+        const allResults = [
+            { type: 'Русский язык', data: russianResults },
+            { type: 'История России', data: historyResults },
+            { type: 'Законодательство РФ', data: lawResults }
+        ];
+        
+        // Отображаем результаты
+        const resultsContainer = document.getElementById('resultsContainer');
+        let totalCorrect = 0;
+        let totalQuestions = 0;
+        let passedTests = 0;
+        
+        allResults.forEach(result => {
+            const percentage = result.data.percentage;
+            const isPassed = percentage >= PASSING_SCORE;
+            
+            if (isPassed) passedTests++;
+            totalCorrect += result.data.correctAnswers;
+            totalQuestions += result.data.totalQuestions;
+            
+            // Создаем элемент для результата
+            const resultElement = document.createElement('div');
+            resultElement.className = `result-card ${isPassed ? 'passed' : 'failed'}`;
+            
+            resultElement.innerHTML = `
+                <div class="result-title">
+                    <span>${result.type}</span>
+                    <span class="result-status">${isPassed ? 'Сдал' : 'Не сдал'}</span>
+                </div>
+                
+                <div class="result-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Правильные ответы</div>
+                        <div class="detail-value">${result.data.correctAnswers}/${result.data.totalQuestions}</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Процент</div>
+                        <div class="detail-value">${percentage}%</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Пропущено</div>
+                        <div class="detail-value">${result.data.skippedAnswers}</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Дата прохождения</div>
+                        <div class="detail-value">${result.data.date}</div>
+                    </div>
+                </div>
+                
+                <svg class="progress-circle" viewBox="0 0 36 36">
+                    <path class="circle-bg"
+                        d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path class="circle-progress"
+                        stroke="${isPassed ? '#28a745' : '#dc3545'}"
+                        stroke-dasharray="${percentage}, 100"
+                        d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <text x="18" y="20.5" class="circle-text" text-anchor="middle">${percentage}%</text>
+                </svg>
+            `;
+            
+            resultsContainer.appendChild(resultElement);
+        });
+        
+        // Отображаем общий результат
+        const finalPercentage = Math.round((totalCorrect / totalQuestions) * 100);
+        const isOverallPassed = passedTests === 3;
+        
+        const finalResult = document.getElementById('finalResult');
+        const finalTitle = document.getElementById('finalTitle');
+        const finalDescription = document.getElementById('finalDescription');
+        
+        finalResult.style.display = 'block';
+        
+        if (isOverallPassed) {
+            finalTitle.textContent = 'Поздравляем! Вы сдали все тесты!';
+            finalTitle.classList.add('final-passed');
+            finalDescription.textContent = `Ваш общий результат: ${finalPercentage}% правильных ответов. Вы можете продолжить оформление документов.`;
+        } else {
+            finalTitle.textContent = 'К сожалению, вы не сдали все тесты';
+            finalTitle.classList.add('final-failed');
+            finalDescription.textContent = `Ваш общий результат: ${finalPercentage}% правильных ответов. Вы сдали ${passedTests} из 3 тестов. Попробуйте еще раз.`;
+        }
+        
+        // Очищаем localStorage при нажатии на кнопку "Начать заново"
+        document.querySelector('.btn-restart').addEventListener('click', function() {
+            localStorage.removeItem('russianTestResults');
+            localStorage.removeItem('historyTestResults');
+            localStorage.removeItem('lawTestResults');
+        });
+    </script>
+</body>
+</html>

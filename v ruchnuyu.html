@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по законодательству РФ для мигрантов (ручной ввод)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #111;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+            border: 1px solid #0ff;
+        }
+        
+        h1 {
+            color: #0ff;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            text-shadow: 0 0 10px #0ff;
+        }
+        
+        .question-container {
+            background: rgba(20, 20, 20, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #0ff;
+            min-height: 200px;
+        }
+        
+        .question-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #0ff;
+        }
+        
+        .answer-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #0ff;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: #ff0;
+            box-shadow: 0 0 10px #ff0;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .btn-next {
+            background: rgba(0, 255, 255, 0.2);
+            color: #0ff;
+            border: 1px solid #0ff;
+        }
+        
+        .btn-next:hover {
+            background: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 15px #0ff;
+        }
+        
+        .btn-skip {
+            background: rgba(255, 255, 0, 0.2);
+            color: #ff0;
+            border: 1px solid #ff0;
+        }
+        
+        .btn-skip:hover {
+            background: rgba(255, 255, 0, 0.4);
+            box-shadow: 0 0 15px #ff0;
+        }
+        
+        .btn-submit {
+            background: rgba(255, 0, 0, 0.2);
+            color: #f00;
+            border: 1px solid #f00;
+            width: 100%;
+        }
+        
+        .btn-submit:hover {
+            background: rgba(255, 0, 0, 0.4);
+            box-shadow: 0 0 15px #f00;
+        }
+        
+        .progress-container {
+            margin-bottom: 25px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #333;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #0ff, #f00);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .progress-text {
+            text-align: right;
+            color: #0ff;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .correct-feedback {
+            background-color: rgba(0, 255, 0, 0.1);
+            border: 1px solid #0f0;
+            color: #0f0;
+        }
+        
+        .incorrect-feedback {
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 1px solid #f00;
+            color: #f00;
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 10px 15px;
+        background-color: rgba(0, 255, 255, 0.2);
+        color: #0ff;
+        border: 1px solid #0ff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Arial', sans-serif;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: rgba(0, 255, 255, 0.4);
+        box-shadow: 0 0 10px #0ff;
+    }
+    </style>
+</head>
+<body>
+    <a href="main.html" class="back-button">← Назад</a>
+    <div class="container">
+        <h1>Тест по законодательству РФ для мигрантов (ручной ввод)</h1>
+        
+        <div class="progress-container">
+            <div class="progress-text" id="progressText">Вопрос 1 из 10</div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="question-container">
+            <div class="question-text" id="questionText"></div>
+            <input type="text" class="answer-input" id="answerInput" placeholder="Введите ваш ответ...">
+            <div class="feedback" id="feedback"></div>
+        </div>
+        
+        <div class="controls" id="controlsContainer">
+            <button class="btn btn-skip" id="skipBtn">Пропустить</button>
+            <button class="btn btn-next" id="nextBtn" disabled>Далее</button>
+        </div>
+        
+        <button class="btn btn-submit" id="submitBtn" style="display: none;">Завершить тест</button>
+    </div>
+
+    <script>
+        // База вопросов по законодательству РФ
+        const questions = [
+            {
+                question: "Какой срок действия у патента на работу в РФ? (введите число в месяцах)",
+                correctAnswer: "12",
+                explanation: "Патент выдается на срок от 1 до 12 месяцев с возможностью продления."
+            },
+            {
+                question: "В течение скольких дней нужно встать на миграционный учет? (введите число)",
+                correctAnswer: "7",
+                explanation: "Мигрант должен встать на учет по месту пребывания в течение 7 рабочих дней."
+            },
+            {
+                question: "Какой налог платят мигранты за патент? (введите название)",
+                correctAnswer: "фиксированный авансовый платеж",
+                explanation: "Мигранты с патентом платят фиксированные авансовые платежи."
+            },
+            {
+                question: "Какое наказание за работу без патента? (введите самое строгое)",
+                correctAnswer: "депортация",
+                explanation: "Работа без патента может привести к депортации с запретом на въезд."
+            },
+            {
+                question: "Как часто нужно продлевать патент? (введите периодичность)",
+                correctAnswer: "ежемесячно",
+                explanation: "Патент нужно продлевать каждый месяц, уплачивая авансовый платеж."
+            },
+            {
+                question: "Какие два основных документа нужны для оформления патента? (введите через запятую)",
+                correctAnswer: "паспорт, миграционная карта",
+                explanation: "Для оформления патента необходимы паспорт и миграционная карта."
+            },
+            {
+                question: "Максимальный срок временного пребывания мигранта в РФ без выезда? (введите число в днях)",
+                correctAnswer: "90",
+                explanation: "Без выезда из РФ мигрант может находиться не более 90 дней."
+            },
+            {
+                question: "Куда обращаться для оформления патента? (введите аббревиатуру)",
+                correctAnswer: "увм мвд",
+                explanation: "За оформлением патента нужно обращаться в УВМ МВД."
+            },
+            {
+                question: "Минимальный срок действия медицинской страховки для патента? (введите число в месяцах)",
+                correctAnswer: "1",
+                explanation: "Медицинская страховка должна быть действительна минимум 1 месяц."
+            },
+            {
+                question: "При какой сумме долга по налогам аннулируется патент? (введите ответ)",
+                correctAnswer: "любая сумма",
+                explanation: "Патент аннулируется при любой задолженности по налогам."
+            },
+            [
+    {
+        question: "Какой срок действия у патента на работу в РФ? (введите число в месяцах)",
+        correctAnswer: "12",
+        explanation: "Патент выдается на срок от 1 до 12 месяцев с возможностью продления."
+    },
+    {
+        question: "В течение скольких дней нужно встать на миграционный учет? (введите число)",
+        correctAnswer: "7",
+        explanation: "Мигрант должен встать на учет по месту пребывания в течение 7 рабочих дней."
+    },
+    {
+        question: "Какой налог платят мигранты за патент? (введите название)",
+        correctAnswer: "фиксированный авансовый платеж",
+        explanation: "Мигранты с патентом платят фиксированные авансовые платежи."
+    },
+    {
+        question: "Какое максимальное количество дней временного пребывания без выезда? (введите число)",
+        correctAnswer: "90",
+        explanation: "Без выезда из РФ мигрант может находиться не более 90 дней."
+    },
+    {
+        question: "Сколько палат в Федеральном Собрании РФ? (введите число)",
+        correctAnswer: "2",
+        explanation: "Федеральное Собрание состоит из Совета Федерации и Государственной Думы."
+    },
+    {
+        question: "Как называется основной документ при пересечении границы РФ? (введите название)",
+        correctAnswer: "миграционная карта",
+        explanation: "Миграционная карта заполняется при въезде в Россию."
+    },
+    {
+        question: "Сколько субъектов в составе РФ? (введите число)",
+        correctAnswer: "85",
+        explanation: "В состав РФ входит 85 субъектов: республики, края, области и др."
+    },
+    {
+        question: "На какой срок выдается разрешение на временное проживание? (введите число в годах)",
+        correctAnswer: "3",
+        explanation: "Разрешение на временное проживание выдается на 3 года."
+    },
+    {
+        question: "Кто осуществляет государственную власть в РФ? (введите через запятую основные органы)",
+        correctAnswer: "президент, федеральное собрание, правительство, суды",
+        explanation: "Государственную власть осуществляют Президент, Федеральное Собрание, Правительство и суды РФ."
+    },
+    {
+        question: "Какой документ подтверждает знание русского языка? (введите название)",
+        correctAnswer: "сертификат",
+        explanation: "Сертификат о знании русского языка выдается после успешной сдачи экзамена."
+    },
+    {
+        question: "Сколько вопросов в тесте по основам законодательства РФ? (введите число)",
+        correctAnswer: "10",
+        explanation: "Тест по основам законодательства содержит 10 вопросов."
+    },
+    {
+        question: "Какой минимальный процент правильных ответов для сдачи теста? (введите число)",
+        correctAnswer: "50",
+        explanation: "Для успешной сдачи нужно правильно ответить на 50% вопросов."
+    },
+    {
+        question: "Куда обращаться для оформления патента? (введите аббревиатуру)",
+        correctAnswer: "увм мвд",
+        explanation: "За оформлением патента нужно обращаться в УВМ МВД."
+    },
+    {
+        question: "Какой срок действия сертификата для РВП? (введите число в годах)",
+        correctAnswer: "5",
+        explanation: "Сертификат для РВП действителен в течение 5 лет."
+    },
+    {
+        question: "Какое наказание за работу без патента? (введите самое строгое)",
+        correctAnswer: "депортация",
+        explanation: "Работа без патента может привести к депортации с запретом на въезд."
+    },
+    {
+        question: "Как часто нужно продлевать патент? (введите периодичность)",
+        correctAnswer: "ежемесячно",
+        explanation: "Патент нужно продлевать каждый месяц, уплачивая авансовый платеж."
+    },
+    {
+        question: "Какие два основных документа нужны для оформления патента? (введите через запятую)",
+        correctAnswer: "паспорт, миграционная карта",
+        explanation: "Для оформления патента необходимы паспорт и миграционная карта."
+    },
+    {
+        question: "Минимальный срок действия медицинской страховки для патента? (введите число в месяцах)",
+        correctAnswer: "1",
+        explanation: "Медицинская страховка должна быть действительна минимум 1 месяц."
+    },
+    {
+        question: "При какой сумме долга по налогам аннулируется патент? (введите ответ)",
+        correctAnswer: "любая сумма",
+        explanation: "Патент аннулируется при любой задолженности по налогам."
+    },
+    {
+        question: "Какой документ заполняют при въезде в РФ? (введите название)",
+        correctAnswer: "миграционная карта",
+        explanation: "Миграционная карта заполняется при пересечении границы."
+    },
+    {
+        question: "Сколько республик в составе РФ? (введите число)",
+        correctAnswer: "22",
+        explanation: "В состав РФ входит 22 республики."
+    },
+    {
+        question: "Какой город является столицей России?",
+        correctAnswer: "москва",
+        explanation: "Столица Российской Федерации - Москва."
+    },
+    {
+        question: "Сколько автономных округов в РФ? (введите число)",
+        correctAnswer: "4",
+        explanation: "В состав РФ входит 4 автономных округа."
+    },
+    {
+        question: "Какой документ нужен для работы у физического лица? (введите название)",
+        correctAnswer: "патент",
+        explanation: "Для работы у физических лиц требуется патент."
+    },
+    {
+        question: "Сколько городов федерального значения в РФ? (введите число)",
+        correctAnswer: "3",
+        explanation: "В РФ 3 города федерального значения: Москва, Санкт-Петербург, Севастополь."
+    },
+    {
+        question: "Какой основной закон РФ? (введите название)",
+        correctAnswer: "конституция",
+        explanation: "Конституция РФ - основной закон страны."
+    },
+    {
+        question: "Кто является главой государства в РФ? (введите должность)",
+        correctAnswer: "президент",
+        explanation: "Главой государства является Президент РФ."
+    },
+    {
+        question: "Как называется парламент РФ? (введите название)",
+        correctAnswer: "федеральное собрание",
+        explanation: "Парламент РФ называется Федеральное Собрание."
+    },
+    {
+        question: "Сколько автономных областей в РФ? (введите число)",
+        correctAnswer: "1",
+        explanation: "В РФ одна автономная область - Еврейская АО."
+    },
+    {
+        question: "Какой срок действия вида на жительство? (введите число в годах)",
+        correctAnswer: "5",
+        explanation: "Вид на жительство выдается на 5 лет."
+    },
+    {
+        question: "Могут ли иностранцы участвовать в выборах в РФ? (введите да/нет)",
+        correctAnswer: "нет",
+        explanation: "Иностранные граждане не имеют избирательных прав в РФ."
+    },
+    {
+        question: "Могут ли иностранцы служить в армии РФ по контракту? (введите да/нет)",
+        correctAnswer: "да",
+        explanation: "Иностранцы могут служить в армии РФ по контракту."
+    },
+    {
+        question: "Признается ли в РФ право частной собственности? (введите да/нет)",
+        correctAnswer: "да",
+        explanation: "Конституция РФ признает и гарантирует право частной собственности."
+    },
+    {
+        question: "Могут ли иностранцы заниматься бизнесом в РФ? (введите да/нет)",
+        correctAnswer: "да",
+        explanation: "Иностранные граждане могут заниматься предпринимательской деятельностью в РФ."
+    },
+    {
+        question: "Какой максимальный срок пребывания без регистрации? (введите число в днях)",
+        correctAnswer: "7",
+        explanation: "Без регистрации можно находиться не более 7 рабочих дней."
+    },
+    {
+        question: "Кто должен поставить мигранта на учет? (введите кто)",
+        correctAnswer: "принимающая сторона",
+        explanation: "Принимающая сторона обязана поставить мигранта на учет."
+    },
+    {
+        question: "Какой документ подтверждает регистрацию? (введите название)",
+        correctAnswer: "уведомление",
+        explanation: "Уведомление о прибытии подтверждает постановку на учет."
+    },
+    {
+        question: "Сколько краев в РФ? (введите число)",
+        correctAnswer: "9",
+        explanation: "В состав РФ входит 9 краев."
+    },
+    {
+        question: "Сколько областей в РФ? (введите число)",
+        correctAnswer: "46",
+        explanation: "В состав РФ входит 46 областей."
+    },
+    {
+        question: "Какой срок действия сертификата для патента? (введите число в годах)",
+        correctAnswer: "3",
+        explanation: "Сертификат для патента действителен 3 года."
+    },
+    {
+        question: "Какой орган выдает сертификаты с 2024 года? (введите тип учреждений)",
+        correctAnswer: "государственные",
+        explanation: "С 2024 года сертификаты выдают только государственные учреждения."
+    },
+    {
+        question: "Сколько стоит экзамен для патента? (введите число в рублях)",
+        correctAnswer: "3800",
+        explanation: "Стоимость экзамена для патента составляет 3800 рублей."
+    },
+    {
+        question: "Какой документ нужен для работы у юридического лица? (введите название)",
+        correctAnswer: "разрешение на работу",
+        explanation: "Для работы у юридических лиц требуется разрешение на работу."
+    },
+    {
+        question: "Сколько частей в экзамене по русскому языку? (введите число)",
+        correctAnswer: "5",
+        explanation: "Экзамен по русскому языку состоит из 5 частей."
+    },
+    {
+        question: "Какой минимальный балл по русскому языку? (введите процент)",
+        correctAnswer: "60",
+        explanation: "Для успешной сдачи нужно набрать не менее 60% по русскому языку."
+    },
+    {
+        question: "Сколько вопросов в тесте по истории? (введите число)",
+        correctAnswer: "10",
+        explanation: "Тест по истории России содержит 10 вопросов."
+    },
+    {
+        question: "В каком году была принята Конституция РФ? (введите год)",
+        correctAnswer: "1993",
+        explanation: "Конституция РФ была принята 12 декабря 1993 года."
+    },
+    {
+        question: "Какой праздник отмечается 12 июня? (введите название)",
+        correctAnswer: "день россии",
+        explanation: "12 июня отмечается День России."
+    },
+    {
+        question: "Кто крестил Русь? (введите имя)",
+        correctAnswer: "владимир",
+        explanation: "Князь Владимир крестил Русь в 988 году."
+    },
+    {
+        question: "Как называлась битва 1943 года под Курском? (введите название)",
+        correctAnswer: "курская дуга",
+        explanation: "Курская битва (Битва на Курской дуге) произошла в 1943 году."
+    },
+    {
+        question: "Кто был первым президентом РФ? (введите фамилию)",
+        correctAnswer: "ельцин",
+        explanation: "Борис Николаевич Ельцин был первым президентом РФ."
+    },
+    {
+        question: "Какой язык является государственным в РФ? (введите название)",
+        correctAnswer: "русский",
+        explanation: "Русский язык является государственным языком РФ."
+    },
+    {
+        question: "Какой документ нужен для ВНЖ? (введите название сертификата)",
+        correctAnswer: "о знании русского языка",
+        explanation: "Для ВНЖ требуется сертификат о знании русского языка."
+    },
+    {
+        question: "Сколько федеральных округов в РФ? (введите число)",
+        correctAnswer: "8",
+        explanation: "В РФ 8 федеральных округов."
+    },
+    {
+        question: "Какой срок действия сертификата для ВНЖ? (введите ответ)",
+        correctAnswer: "бессрочно",
+        explanation: "Сертификат для ВНЖ действует бессрочно."
+    },
+    {
+        question: "Какой орган принимает законы в РФ? (введите название)",
+        correctAnswer: "государственная дума",
+        explanation: "Государственная Дума принимает федеральные законы."
+    },
+    {
+        question: "Кто подписывает федеральные законы? (введите должность)",
+        correctAnswer: "президент",
+        explanation: "Президент РФ подписывает и обнародует федеральные законы."
+    },
+    {
+        question: "Как называется верхняя палата парламента? (введите название)",
+        correctAnswer: "совет федерации",
+        explanation: "Совет Федерации - верхняя палата Федерального Собрания."
+    },
+    {
+        question: "Как называется нижняя палата парламента? (введите название)",
+        correctAnswer: "государственная дума",
+        explanation: "Государственная Дума - нижняя палата Федерального Собрания."
+    },
+    {
+        question: "Сколько депутатов в Государственной Думе? (введите число)",
+        correctAnswer: "450",
+        explanation: "Государственная Дума состоит из 450 депутатов."
+    },
+    {
+        question: "Какой срок полномочий Президента РФ? (введите число в годах)",
+        correctAnswer: "6",
+        explanation: "Президент РФ избирается на 6 лет."
+    },
+    {
+        question: "Какой срок полномочий Государственной Думы? (введите число в годах)",
+        correctAnswer: "5",
+        explanation: "Государственная Дума избирается на 5 лет."
+    },
+    {
+        question: "Кто является Верховным Главнокомандующим? (введите должность)",
+        correctAnswer: "президент",
+        explanation: "Президент РФ является Верховным Главнокомандующим."
+    },
+    {
+        question: "Какой документ регулирует правовое положение иностранцев? (введите название закона)",
+        correctAnswer: "о правовом положении иностранных граждан",
+        explanation: "ФЗ №115 регулирует правовое положение иностранных граждан."
+    },
+    {
+        question: "Какой орган рассматривает административные дела? (введите название)",
+        correctAnswer: "суд",
+        explanation: "Административные дела рассматриваются судами."
+    },
+    {
+        question: "Какой документ подтверждает право на работу? (введите название)",
+        correctAnswer: "трудовой договор",
+        explanation: "Трудовой договор подтверждает право на работу."
+    },
+    {
+        question: "Какой максимальный срок административного выдворения? (введите число в годах)",
+        correctAnswer: "10",
+        explanation: "Максимальный срок запрета на въезд после выдворения - 10 лет."
+    }
+]
+        ];
+
+        // Переменные теста
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(questions.length).fill(null);
+        const totalQuestions = questions.length;
+        
+        // Инициализация теста
+        function initTest() {
+            // Показываем первый вопрос
+            displayQuestion();
+            
+            // Настройка кнопок
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+            document.getElementById('skipBtn').addEventListener('click', skipQuestion);
+            document.getElementById('submitBtn').addEventListener('click', submitTest);
+            document.getElementById('answerInput').addEventListener('input', checkAnswer);
+            document.getElementById('answerInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    if (!document.getElementById('nextBtn').disabled) {
+                        nextQuestion();
+                    }
+                }
+            });
+        }
+        
+        // Отображение текущего вопроса
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('answerInput').focus();
+            
+            // Обновление прогресса
+            updateProgress();
+            
+            // Показываем/скрываем кнопки
+            if (currentQuestionIndex === totalQuestions - 1) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+        
+        // Проверка ответа
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const correctAnswer = questions[currentQuestionIndex].correctAnswer.toLowerCase();
+            
+            if (userAnswer.length > 0) {
+                document.getElementById('nextBtn').disabled = false;
+            } else {
+                document.getElementById('nextBtn').disabled = true;
+            }
+        }
+        
+        // Следующий вопрос
+        function nextQuestion() {
+            const userAnswer = document.getElementById('answerInput').value.trim();
+            userAnswers[currentQuestionIndex] = userAnswer;
+            
+            // Проверка ответа и показ обратной связи
+            const feedback = document.getElementById('feedback');
+            const correctAnswer = questions[currentQuestionIndex].correctAnswer.toLowerCase();
+            
+            if (userAnswer.toLowerCase() === correctAnswer) {
+                feedback.className = 'feedback correct-feedback';
+                feedback.innerHTML = `✓ Правильно! ${questions[currentQuestionIndex].explanation}`;
+            } else {
+                feedback.className = 'feedback incorrect-feedback';
+                feedback.innerHTML = `✗ Неверно. Правильный ответ: "${questions[currentQuestionIndex].correctAnswer}". ${questions[currentQuestionIndex].explanation}`;
+            }
+            
+            feedback.style.display = 'block';
+            
+            // Переход к следующему вопросу через 2 секунды
+            setTimeout(() => {
+                if (currentQuestionIndex < totalQuestions - 1) {
+                    currentQuestionIndex++;
+                    displayQuestion();
+                }
+            }, 2000);
+        }
+        
+        // Пропустить вопрос
+        function skipQuestion() {
+            userAnswers[currentQuestionIndex] = null;
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        // Обновление прогресс-бара
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Вопрос ${currentQuestionIndex + 1} из ${totalQuestions}`;
+        }
+        
+        // Отправка результатов
+        function submitTest() {
+            // Подсчет результатов
+            let correctAnswers = 0;
+            let skippedAnswers = 0;
+            
+            for (let i = 0; i < totalQuestions; i++) {
+                if (userAnswers[i] === null) {
+                    skippedAnswers++;
+                } else if (userAnswers[i].toLowerCase() === questions[i].correctAnswer.toLowerCase()) {
+                    correctAnswers++;
+                }
+            }
+            
+            // Подготовка данных для передачи
+            const testResults = {
+                testType: "Законодательство РФ (ручной ввод)",
+                date: new Date().toLocaleString(),
+                correctAnswers: correctAnswers,
+                totalQuestions: totalQuestions,
+                skippedAnswers: skippedAnswers,
+                percentage: Math.round((correctAnswers / totalQuestions) * 100),
+                answers: userAnswers.map((answer, index) => ({
+                    question: questions[index].question,
+                    userAnswer: answer !== null ? answer : "Пропущено",
+                    correctAnswer: questions[index].correctAnswer,
+                    isCorrect: answer !== null && answer.toLowerCase() === questions[index].correctAnswer.toLowerCase()
+                }))
+            };
+            
+            // Сохраняем результаты в localStorage
+            localStorage.setItem('lawTestManualResults', JSON.stringify(testResults));
+            
+            // Переход на страницу результатов
+            window.location.href = 'test-results-manual.html';
+        }
+        
+        // Запуск теста при загрузке страницы
+        document.addEventListener('DOMContentLoaded', initTest);
+    </script>
+</body>
+</html>

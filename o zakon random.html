@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по законодательству РФ (рандомизированный)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #1a2a6c;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+        }
+        
+        .question-container {
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #b21f1f;
+            min-height: 200px;
+        }
+        
+        .question-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background-color: #d1d7dc;
+        }
+        
+        .option.selected {
+            background-color: #1a2a6c;
+            color: white;
+            border-color: #b21f1f;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #1a2a6c, #3a4a8c);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 42, 108, 0.3);
+        }
+        
+        .btn-skip {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+        }
+        
+        .btn-skip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #b21f1f, #d23030);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(178, 31, 31, 0.3);
+        }
+        
+        .progress-container {
+            margin-bottom: 25px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .progress-text {
+            text-align: right;
+            color: #6c757d;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 10px 15px;
+        background-color: rgba(0, 255, 255, 0.2);
+        color: #0ff;
+        border: 1px solid #0ff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Arial', sans-serif;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: rgba(0, 255, 255, 0.4);
+        box-shadow: 0 0 10px #0ff;
+    }
+    </style>
+</head>
+<body>
+    <a href="main.html" class="back-button">← Назад</a>
+    <div class="container">
+        <h1>Тест по законодательству РФ для мигрантов</h1>
+        
+        <div class="progress-container">
+            <div class="progress-text" id="progressText">Вопрос 1 из 10</div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="question-container">
+            <div class="question-text" id="questionText"></div>
+            <div class="options-container" id="optionsContainer"></div>
+        </div>
+        
+        <div class="controls" id="controlsContainer">
+            <button class="btn btn-skip" id="skipBtn">Пропустить</button>
+            <button class="btn btn-next" id="nextBtn" disabled>Далее</button>
+        </div>
+        
+        <a href="test-results.html" class="btn btn-submit" id="submitBtn" style="display: none; text-decoration: none;">Завершить тест</a>
+    </div>
+
+    <script>
+        // Полная база вопросов (60 вопросов)
+        const allQuestions = [
+            {
+                question: "Какой срок действия у патента на работу в РФ?",
+                options: ["1 месяц", "1 год", "3 года", "5 лет"],
+                correct: 1
+            },
+            {
+                question: "В течение скольких дней нужно встать на миграционный учет?",
+                options: ["3 дня", "7 дней", "15 дней", "30 дней"],
+                correct: 1
+            },
+            {
+                question: "Какой налог платят мигранты за патент?",
+                options: ["НДФЛ", "Пенсионные взносы", "Фиксированный авансовый платеж", "НДС"],
+                correct: 2
+            },
+            {
+                question: "Какое наказание за работу без патента?",
+                options: ["Штраф", "Департация", "Запрет на въезд", "Все варианты верны"],
+                correct: 3
+            },
+            {
+                question: "Как часто нужно продлевать патент?",
+                options: ["Ежемесячно", "Раз в полгода", "Ежегодно", "Только при смене работы"],
+                correct: 0
+            },
+            {
+                question: "Какие документы нужны для оформления патента?",
+                options: ["Паспорт и миграционная карта", "Диплом об образовании", "Трудовая книжка", "Все перечисленное"],
+                correct: 0
+            },
+            {
+                question: "Максимальный срок временного пребывания мигранта в РФ?",
+                options: ["90 дней", "180 дней", "1 год", "Нет ограничений"],
+                correct: 0
+            },
+            {
+                question: "Куда обращаться для оформления патента?",
+                options: ["МФЦ", "Миграционный центр", "УВМ МВД", "Все варианты верны"],
+                correct: 3
+            },
+            {
+                question: "Минимальный срок действия медицинской страховки для патента?",
+                options: ["1 месяц", "3 месяца", "6 месяцев", "1 год"],
+                correct: 0
+            },
+            {
+                question: "При какой сумме долга по налогам аннулируется патент?",
+                options: ["1000 руб", "5000 руб", "10000 руб", "Любая сумма долга"],
+                correct: 3
+            },
+            {
+                question: "Как называется основной документ при пересечении границы РФ?",
+                options: ["Виза", "Миграционная карта", "Приглашение", "Загранпаспорт"],
+                correct: 1
+            },
+            {
+                question: "Сколько субъектов в составе РФ?",
+                options: ["46", "65", "78", "85"],
+                correct: 3
+            },
+            {
+                question: "На какой срок выдается разрешение на временное проживание?",
+                options: ["1 год", "2 года", "3 года", "5 лет"],
+                correct: 2
+            },
+            {
+                question: "Кто осуществляет государственную власть в РФ?",
+                options: ["Президент", "Федеральное Собрание", "Правительство", "Все перечисленные"],
+                correct: 3
+            },
+            {
+                question: "Какой документ подтверждает знание русского языка?",
+                options: ["Диплом", "Сертификат", "Справка", "Удостоверение"],
+                correct: 1
+            },
+            {
+                question: "Сколько вопросов в тесте по основам законодательства РФ?",
+                options: ["5", "10", "15", "20"],
+                correct: 1
+            },
+            {
+                question: "Какой минимальный процент правильных ответов для сдачи теста?",
+                options: ["30%", "50%", "70%", "80%"],
+                correct: 1
+            },
+            {
+                question: "Какой город является столицей России?",
+                options: ["Санкт-Петербург", "Москва", "Новосибирск", "Казань"],
+                correct: 1
+            },
+            {
+                question: "Какой основной закон РФ?",
+                options: ["Гражданский кодекс", "Конституция", "Федеральный закон", "Уголовный кодекс"],
+                correct: 1
+            },
+            {
+                question: "Кто является главой государства в РФ?",
+                options: ["Премьер-министр", "Президент", "Председатель ГД", "Патриарх"],
+                correct: 1
+            },
+            {
+                question: "Как называется парламент РФ?",
+                options: ["Государственный Совет", "Федеральное Собрание", "Верховный Совет", "Национальная Ассамблея"],
+                correct: 1
+            },
+            {
+                question: "Сколько республик в составе РФ?",
+                options: ["15", "18", "21", "22"],
+                correct: 3
+            },
+            {
+                question: "Какой срок действия вида на жительство?",
+                options: ["3 года", "5 лет", "10 лет", "Бессрочно"],
+                correct: 1
+            },
+            {
+                question: "Могут ли иностранцы участвовать в выборах в РФ?",
+                options: ["Да", "Нет", "Только местных", "Только с ВНЖ"],
+                correct: 1
+            },
+            {
+                question: "Признается ли в РФ право частной собственности?",
+                options: ["Да", "Нет", "Только для граждан", "Только на землю"],
+                correct: 0
+            },
+            {
+                question: "Какой максимальный срок пребывания без регистрации?",
+                options: ["3 дня", "7 дней", "15 дней", "30 дней"],
+                correct: 1
+            },
+            {
+                question: "Кто должен поставить мигранта на учет?",
+                options: ["Он сам", "Принимающая сторона", "Работодатель", "Миграционная служба"],
+                correct: 1
+            },
+            {
+                question: "Какой документ подтверждает регистрацию?",
+                options: ["Справка", "Уведомление", "Штамп в паспорте", "Свидетельство"],
+                correct: 1
+            },
+            {
+                question: "Сколько краев в РФ?",
+                options: ["6", "8", "9", "12"],
+                correct: 2
+            },
+            {
+                question: "Сколько областей в РФ?",
+                options: ["42", "46", "50", "55"],
+                correct: 1
+            },
+            {
+                question: "Какой срок действия сертификата для патента?",
+                options: ["1 год", "3 года", "5 лет", "Бессрочно"],
+                correct: 2
+            },
+            {
+                question: "Какой орган выдает сертификаты с 2024 года?",
+                options: ["Частные центры", "Государственные учреждения", "Университеты", "Миграционные центры"],
+                correct: 1
+            },
+            {
+                question: "Сколько стоит экзамен для патента?",
+                options: ["2500 руб", "3800 руб", "5000 руб", "6000 руб"],
+                correct: 1
+            },
+            {
+                question: "Какой документ нужен для работы у юридического лица?",
+                options: ["Патент", "Разрешение на работу", "Трудовой договор", "Справка о доходах"],
+                correct: 1
+            },
+            {
+                question: "Сколько частей в экзамене по русскому языку?",
+                options: ["3", "4", "5", "6"],
+                correct: 2
+            },
+            {
+                question: "Какой минимальный балл по русскому языку?",
+                options: ["40%", "50%", "60%", "70%"],
+                correct: 2
+            },
+            {
+                question: "Сколько вопросов в тесте по истории?",
+                options: ["5", "10", "15", "20"],
+                correct: 1
+            },
+            {
+                question: "В каком году была принята Конституция РФ?",
+                options: ["1991", "1993", "1995", "2000"],
+                correct: 1
+            },
+            {
+                question: "Какой праздник отмечается 12 июня?",
+                options: ["День Конституции", "День России", "День Независимости", "День Народного Единства"],
+                correct: 1
+            },
+            {
+                question: "Кто крестил Русь?",
+                options: ["Ярослав Мудрый", "Владимир Красное Солнышко", "Иван Грозный", "Петр Первый"],
+                correct: 1
+            },
+            {
+                question: "Как называлась битва 1943 года под Курском?",
+                options: ["Курская битва", "Сталинградская битва", "Битва за Москву", "Операция Багратион"],
+                correct: 0
+            },
+            {
+                question: "Кто был первым президентом РФ?",
+                options: ["Михаил Горбачев", "Борис Ельцин", "Владимир Путин", "Дмитрий Медведев"],
+                correct: 1
+            },
+            {
+                question: "Какой язык является государственным в РФ?",
+                options: ["Русский", "Русский и английский", "Русский и языки субъектов", "Все языки народов РФ"],
+                correct: 0
+            },
+            {
+                question: "Сколько федеральных округов в РФ?",
+                options: ["6", "7", "8", "9"],
+                correct: 2
+            },
+            {
+                question: "Какой срок действия сертификата для ВНЖ?",
+                options: ["3 года", "5 лет", "10 лет", "Бессрочно"],
+                correct: 3
+            },
+            {
+                question: "Какой орган принимает законы в РФ?",
+                options: ["Правительство", "Государственная Дума", "Совет Федерации", "Президент"],
+                correct: 1
+            },
+            {
+                question: "Кто подписывает федеральные законы?",
+                options: ["Председатель Правительства", "Президент", "Председатель ГД", "Министр юстиции"],
+                correct: 1
+            },
+            {
+                question: "Как называется верхняя палата парламента?",
+                options: ["Государственная Дума", "Совет Федерации", "Верховный Совет", "Федеральный Совет"],
+                correct: 1
+            },
+            {
+                question: "Как называется нижняя палата парламента?",
+                options: ["Государственная Дума", "Совет Федерации", "Национальное Собрание", "Федеральное Собрание"],
+                correct: 0
+            },
+            {
+                question: "Сколько депутатов в Государственной Думе?",
+                options: ["300", "400", "450", "500"],
+                correct: 2
+            },
+            {
+                question: "Какой срок полномочий Президента РФ?",
+                options: ["4 года", "5 лет", "6 лет", "7 лет"],
+                correct: 2
+            },
+            {
+                question: "Какой срок полномочий Государственной Думы?",
+                options: ["4 года", "5 лет", "6 лет", "7 лет"],
+                correct: 1
+            },
+            {
+                question: "Кто является Верховным Главнокомандующим?",
+                options: ["Министр обороны", "Президент", "Начальник Генштаба", "Председатель Совбеза"],
+                correct: 1
+            },
+            {
+                question: "Какой документ регулирует правовое положение иностранцев?",
+                options: ["ФЗ №62", "ФЗ №115", "ФЗ №114", "ФЗ №109"],
+                correct: 1
+            },
+            {
+                question: "Какой орган рассматривает административные дела?",
+                options: ["Прокуратура", "Суд", "Полиция", "Миграционная служба"],
+                correct: 1
+            },
+            {
+                question: "Какой документ подтверждает право на работу?",
+                options: ["Трудовая книжка", "Трудовой договор", "Справка 2-НДФЛ", "Приказ о приеме"],
+                correct: 1
+            },
+            {
+                question: "Какой максимальный срок административного выдворения?",
+                options: ["3 года", "5 лет", "7 лет", "10 лет"],
+                correct: 3
+            }
+        ];
+
+        // Переменные теста
+        let currentQuestionIndex = 0;
+        let selectedQuestions = [];
+        let userAnswers = [];
+        const totalQuestions = 10; // Количество вопросов в тесте
+        
+        // Функция для перемешивания массива
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        
+        // Функция для перемешивания вариантов ответов
+        function shuffleQuestion(question) {
+            // Создаем копию вопроса
+            const shuffledQuestion = {...question};
+            
+            // Сохраняем правильный ответ
+            const correctAnswer = shuffledQuestion.options[shuffledQuestion.correct];
+            
+            // Перемешиваем варианты
+            shuffledQuestion.options = shuffleArray([...shuffledQuestion.options]);
+            
+            // Находим новый индекс правильного ответа
+            shuffledQuestion.correct = shuffledQuestion.options.indexOf(correctAnswer);
+            
+            return shuffledQuestion;
+        }
+        
+        // Инициализация теста
+        function initTest() {
+            // Выбираем случайные 10 вопросов из всей базы
+            const shuffledAll = shuffleArray([...allQuestions]);
+            selectedQuestions = shuffledAll.slice(0, totalQuestions).map(shuffleQuestion);
+            
+            // Инициализируем массив ответов
+            userAnswers = Array(totalQuestions).fill(null);
+            
+            // Показываем первый вопрос
+            displayQuestion();
+            
+            // Настройка кнопок
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+            document.getElementById('skipBtn').addEventListener('click', skipQuestion);
+            document.getElementById('submitBtn').addEventListener('click', submitTest);
+        }
+        
+        // Отображение текущего вопроса
+        function displayQuestion() {
+            const question = selectedQuestions[currentQuestionIndex];
+            
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                }
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectAnswer(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Обновление прогресса
+            updateProgress();
+            
+            // Показываем/скрываем кнопки
+            document.getElementById('nextBtn').disabled = userAnswers[currentQuestionIndex] === null;
+            
+            if (currentQuestionIndex === totalQuestions - 1) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+        
+        // Выбор ответа
+        function selectAnswer(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            options[index].classList.add('selected');
+            userAnswers[currentQuestionIndex] = index;
+            document.getElementById('nextBtn').disabled = false;
+        }
+        
+        // Следующий вопрос
+        function nextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        // Пропустить вопрос
+        function skipQuestion() {
+            userAnswers[currentQuestionIndex] = null;
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        // Обновление прогресс-бара
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Вопрос ${currentQuestionIndex + 1} из ${totalQuestions}`;
+        }
+        
+        // Отправка результатов
+        function submitTest() {
+            // Подсчет результатов
+            let correctAnswers = 0;
+            let skippedAnswers = 0;
+            
+            for (let i = 0; i < totalQuestions; i++) {
+                if (userAnswers[i] === null) {
+                    skippedAnswers++;
+                } else if (userAnswers[i] === selectedQuestions[i].correct) {
+                    correctAnswers++;
+                }
+            }
+            
+            // Подготовка данных для передачи
+            const testResults = {
+                testType: "Законодательство РФ (рандомизированный)",
+                date: new Date().toLocaleString(),
+                correctAnswers: correctAnswers,
+                totalQuestions: totalQuestions,
+                skippedAnswers: skippedAnswers,
+                percentage: Math.round((correctAnswers / totalQuestions) * 100),
+                answers: userAnswers.map((answer, index) => ({
+                    question: selectedQuestions[index].question,
+                    userAnswer: answer !== null ? selectedQuestions[index].options[answer] : "Пропущено",
+                    correctAnswer: selectedQuestions[index].options[selectedQuestions[index].correct],
+                    isCorrect: answer === selectedQuestions[index].correct
+                }))
+            };
+            
+            // Сохраняем результаты в localStorage
+            localStorage.setItem('lawTestRandomResults', JSON.stringify(testResults));
+            
+            // Активируем переход по ссылке
+            document.getElementById('submitBtn').click();
+        }
+        
+        // Запуск теста при загрузке страницы
+        document.addEventListener('DOMContentLoaded', initTest);
+    </script>
+</body>
+</html>

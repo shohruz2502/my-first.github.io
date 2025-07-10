@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по русскому языку для патента</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #1a2a6c;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+        }
+        
+        .question-container {
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #b21f1f;
+            min-height: 200px;
+        }
+        
+        .question-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            border: 2px solid transparent;
+        }
+        
+        .option:hover {
+            background-color: #d1d7dc;
+        }
+        
+        .option.selected {
+            background-color: #1a2a6c;
+            color: white;
+            border-color: #b21f1f;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #1a2a6c, #3a4a8c);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 42, 108, 0.3);
+        }
+        
+        .btn-skip {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+        }
+        
+        .btn-skip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #b21f1f, #d23030);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(178, 31, 31, 0.3);
+        }
+        
+        .progress-container {
+            margin-bottom: 25px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .progress-text {
+            text-align: right;
+            color: #6c757d;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 10px 15px;
+        background-color: rgba(0, 255, 255, 0.2);
+        color: #0ff;
+        border: 1px solid #0ff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-family: 'Arial', sans-serif;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    
+    .back-button:hover {
+        background-color: rgba(0, 255, 255, 0.4);
+        box-shadow: 0 0 10px #0ff;
+    }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="main.html" class="back-button">← Назад</a>
+    <div class="container">
+        <h1>Тест по русскому языку для трудовых мигрантов</h1>
+        
+        <div class="progress-container">
+            <div class="progress-text" id="progressText">Вопрос 1 из 10</div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="question-container">
+            <div class="question-text" id="questionText"></div>
+            <div class="options-container" id="optionsContainer"></div>
+        </div>
+        
+        <div class="controls" id="controlsContainer">
+            <button class="btn btn-skip" id="skipBtn">Пропустить</button>
+            <button class="btn btn-next" id="nextBtn" disabled>Далее</button>
+        </div>
+        
+        <button class="btn btn-submit" id="submitBtn" style="display: none;">Завершить тест</button>
+    </div>
+
+    <script>
+        // База вопросов (60 вопросов)
+        const questions = [
+            {
+                question: "Выберите правильный вариант: Я ___ из Таджикистана.",
+                options: ["приехал", "приехала", "приехали", "приехалой"],
+                correct: 0
+            },
+            {
+                question: "Как правильно сказать:",
+                options: ["Я хочу работать", "Я хочу работаю", "Я хочу работал", "Я хочу работаться"],
+                correct: 0
+            },
+            {
+                question: "Выберите правильное слово: Мне нужно ___ документы.",
+                options: ["оформить", "оформлять", "оформление", "оформленный"],
+                correct: 0
+            },
+            {
+                question: "Как правильно спросить:",
+                options: ["Где здесь банк?", "Где тут банк?", "Где банк здесь?", "Где банк тут?"],
+                correct: 0
+            },
+            {
+                question: "Выберите правильный вариант: Я работаю ___ строительстве.",
+                options: ["на", "в", "за", "под"],
+                correct: 1
+            },
+            {
+    question: "Как правильно продолжить: Я работаю...",
+    options: ["в строительстве", "на строительстве", "за строительством", "со строительством"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Мне нужно... документы.",
+    options: ["оформить", "оформлять", "оформление", "оформленный"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить?",
+    options: ["Где здесь банк?", "Где тут банк?", "Где банк здесь?", "Где банк тут?"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... русский язык.",
+    options: ["учу", "учить", "учусь", "учиться"],
+    correct: 0
+},
+{
+    question: "Как правильно сказать?",
+    options: ["Я ищу работу", "Я искаю работу", "Я поискать работу", "Я ищю работу"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... в Москве 5 лет.",
+    options: ["живу", "живет", "жил", "жили"],
+    correct: 0
+},
+{
+    question: "Как правильно: Мне нужно... патент.",
+    options: ["продлить", "продливать", "продленный", "продление"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... деньги домой.",
+    options: ["отправляю", "отправить", "отправляюсь", "отправление"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить время?",
+    options: ["Сколько времени?", "Который час?", "Какое время?", "Какой час?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... завтра на работу.",
+    options: ["иду", "пойду", "хожу", "пошел"],
+    correct: 1
+},
+{
+    question: "Как правильно: Я... в магазин.",
+    options: ["пошел", "пошла", "пошли", "пошол"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Мне нужно... квартиру.",
+    options: ["снять", "снимать", "снятие", "снятый"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить цену?",
+    options: ["Сколько стоит?", "Как много стоит?", "Какая цена?", "Сколько цена?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... в России 2 года.",
+    options: ["нахожусь", "находиться", "находился", "находились"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... документы в миграционной службе.",
+    options: ["подал", "подала", "подали", "подалый"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... на стройке.",
+    options: ["работаю", "работать", "работается", "работающий"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить дорогу?",
+    options: ["Как пройти к метро?", "Как идти к метро?", "Как ходить к метро?", "Как пойти к метро?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... завтра к врачу.",
+    options: ["пойду", "иду", "хожу", "пошел"],
+    correct: 0
+},
+{
+    question: "Как правильно: Мне нужно... в поликлинику.",
+    options: ["записаться", "записываться", "запись", "записанный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... билет на автобус.",
+    options: ["купил", "купила", "купили", "купленный"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о работе?",
+    options: ["У вас есть вакансии?", "У вас есть работы?", "У вас есть должности?", "У вас есть занятости?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... в общежитии.",
+    options: ["живу", "живет", "жил", "жили"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... деньги в банке.",
+    options: ["получил", "получила", "получили", "полученный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... русский язык на курсах.",
+    options: ["изучаю", "изучить", "изучаюсь", "изучение"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о зарплате?",
+    options: ["Сколько вы платите?", "Как много вы платите?", "Какая оплата?", "Сколько заработок?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... вчера документы.",
+    options: ["подал", "подала", "подали", "подалый"],
+    correct: 0
+},
+{
+    question: "Как правильно: Мне нужно... налогов.",
+    options: ["заплатить", "платить", "плата", "плаченный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... в Москву месяц назад.",
+    options: ["приехал", "приехала", "приехали", "приехалой"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о жилье?",
+    options: ["Где можно снять квартиру?", "Где можно арендовать квартиру?", "Где можно получить квартиру?", "Где можно найти квартиру?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... на заводе.",
+    options: ["работаю", "работать", "работается", "работающий"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... в Россию по визе.",
+    options: ["приехал", "приехала", "приехали", "приехалой"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... в магазине продукты.",
+    options: ["купил", "купила", "купили", "купленный"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о графике работы?",
+    options: ["Какое у вас расписание?", "Какой у вас график?", "Какое у вас время?", "Какой у вас режим?"],
+    correct: 1
+},
+{
+    question: "Выберите правильный вариант: Я... завтра выходной.",
+    options: ["имею", "есть", "буду", "имеется"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... документы в МФЦ.",
+    options: ["оформил", "оформила", "оформили", "оформленный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... деньги семье.",
+    options: ["отправляю", "отправить", "отправляюсь", "отправление"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о зарплате?",
+    options: ["Когда выплачивают зарплату?", "Когда дают зарплату?", "Когда платят зарплату?", "Когда получают зарплату?"],
+    correct: 2
+},
+{
+    question: "Выберите правильный вариант: Я... в России легально.",
+    options: ["нахожусь", "находиться", "находился", "находились"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... медицинскую страховку.",
+    options: ["оформил", "оформила", "оформили", "оформленный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... на работу в 8 утра.",
+    options: ["встаю", "встать", "встаюсь", "вставание"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о больнице?",
+    options: ["Где ближайшая больница?", "Где близкая больница?", "Где недалекая больница?", "Где рядом больница?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... в поликлинику за справкой.",
+    options: ["пошел", "пошла", "пошли", "пошол"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... русский язык каждый день.",
+    options: ["учу", "учить", "учусь", "учиться"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... в общежитии с друзьями.",
+    options: ["живу", "живет", "жил", "жили"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о работе?",
+    options: ["Какая у вас зарплата?", "Сколько вы платите?", "Какой у вас оклад?", "Какая у вас оплата?"],
+    correct: 1
+},
+{
+    question: "Выберите правильный вариант: Я... на рынке.",
+    options: ["работаю", "работать", "работается", "работающий"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... в Россию работать.",
+    options: ["приехал", "приехала", "приехали", "приехалой"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... документы на патент.",
+    options: ["подал", "подала", "подали", "подалый"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о транспорте?",
+    options: ["Как доехать до центра?", "Как проехать до центра?", "Как попасть до центра?", "Как двигаться до центра?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... в Москве временно.",
+    options: ["проживаю", "прожить", "проживаюсь", "проживание"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... налоговый номер.",
+    options: ["получил", "получила", "получили", "полученный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... на стройке помощником.",
+    options: ["работаю", "работать", "работается", "работающий"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о жилье?",
+    options: ["Сколько стоит аренда?", "Сколько стоит съем?", "Сколько стоит наем?", "Сколько стоит рента?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... завтра на обследование.",
+    options: ["иду", "пойду", "хожу", "пошел"],
+    correct: 1
+},
+{
+    question: "Как правильно: Я... документы переводом.",
+    options: ["перевел", "перевела", "перевели", "переведенный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... в Россию по приглашению.",
+    options: ["приехал", "приехала", "приехали", "приехалой"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о работе?",
+    options: ["Какие у вас условия труда?", "Какие у вас рабочие условия?", "Какие у вас трудовые условия?", "Какие у вас условия работы?"],
+    correct: 3
+},
+{
+    question: "Выберите правильный вариант: Я... в строительной компании.",
+    options: ["работаю", "работать", "работается", "работающий"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... медицинский осмотр.",
+    options: ["прошел", "прошла", "прошли", "пройденный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... русский с репетитором.",
+    options: ["учу", "учить", "учусь", "учиться"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о документах?",
+    options: ["Какие документы нужны?", "Какие документы необходимы?", "Какие документы требуются?", "Какие документы надо?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... в России по патенту.",
+    options: ["работаю", "работать", "работается", "работающий"],
+    correct: 0
+},
+{
+    question: "Как правильно: Я... деньги через банк.",
+    options: ["отправил", "отправила", "отправили", "отправленный"],
+    correct: 0
+},
+{
+    question: "Выберите правильное слово: Я... в Москве год.",
+    options: ["живу", "живет", "жил", "жили"],
+    correct: 0
+},
+{
+    question: "Как правильно спросить о зарплате?",
+    options: ["Как часто платят зарплату?", "Как регулярно платят зарплату?", "Как обычно платят зарплату?", "Как платят зарплату?"],
+    correct: 0
+},
+{
+    question: "Выберите правильный вариант: Я... на работу автобусом.",
+    options: ["еду", "поеду", "езжу", "поехал"],
+    correct: 0
+}
+            
+        ];
+
+        // Переменные теста
+        let currentQuestionIndex = 0;
+        let selectedQuestions = [];
+        let userAnswers = Array(10).fill(null);
+        const totalQuestions = 10;
+        
+        // Инициализация теста
+        function initTest() {
+            // Выбираем случайные вопросы
+            const shuffled = [...questions].sort(() => 0.5 - Math.random());
+            selectedQuestions = shuffled.slice(0, totalQuestions);
+            
+            // Показываем первый вопрос
+            displayQuestion();
+            
+            // Настройка кнопок
+            document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+            document.getElementById('skipBtn').addEventListener('click', skipQuestion);
+            document.getElementById('submitBtn').addEventListener('click', submitTest);
+        }
+        
+        // Отображение текущего вопроса
+        function displayQuestion() {
+            const question = selectedQuestions[currentQuestionIndex];
+            
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                }
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectAnswer(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Обновление прогресса
+            updateProgress();
+            
+            // Показываем/скрываем кнопки
+            document.getElementById('nextBtn').disabled = userAnswers[currentQuestionIndex] === null;
+            
+            if (currentQuestionIndex === totalQuestions - 1) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+        
+        // Выбор ответа
+        function selectAnswer(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            options[index].classList.add('selected');
+            userAnswers[currentQuestionIndex] = index;
+            document.getElementById('nextBtn').disabled = false;
+        }
+        
+        // Следующий вопрос
+        function nextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        // Пропустить вопрос
+        function skipQuestion() {
+            userAnswers[currentQuestionIndex] = null;
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+        
+        // Обновление прогресс-бара
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Вопрос ${currentQuestionIndex + 1} из ${totalQuestions}`;
+        }
+        
+        // Отправка результатов
+        function submitTest() {
+            // Подсчет результатов
+            let correctAnswers = 0;
+            let skippedAnswers = 0;
+            
+            for (let i = 0; i < totalQuestions; i++) {
+                if (userAnswers[i] === null) {
+                    skippedAnswers++;
+                } else if (userAnswers[i] === selectedQuestions[i].correct) {
+                    correctAnswers++;
+                }
+            }
+            
+            // Подготовка данных для передачи
+            const testResults = {
+                testType: "Русский язык",
+                date: new Date().toLocaleString(),
+                correctAnswers: correctAnswers,
+                totalQuestions: totalQuestions,
+                skippedAnswers: skippedAnswers,
+                percentage: Math.round((correctAnswers / totalQuestions) * 100),
+                answers: userAnswers.map((answer, index) => ({
+                    question: selectedQuestions[index].question,
+                    userAnswer: answer !== null ? selectedQuestions[index].options[answer] : "Пропущено",
+                    correctAnswer: selectedQuestions[index].options[selectedQuestions[index].correct],
+                    isCorrect: answer === selectedQuestions[index].correct
+                }))
+            };
+            
+            // Сохраняем результаты в localStorage
+            localStorage.setItem('russianTestResults', JSON.stringify(testResults));
+            
+            // Переход на страницу результатов
+            window.location.href = "testi po istorii.html";
+        }
+        
+        // Запуск теста при загрузке страницы
+        document.addEventListener('DOMContentLoaded', initTest);
+    </script>
+</body>
+</html>
