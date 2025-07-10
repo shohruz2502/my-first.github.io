@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты теста</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #111;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+            border: 1px solid #0ff;
+        }
+        
+        h1 {
+            color: #0ff;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px #0ff;
+        }
+        
+        .result-summary {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+        }
+        
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0ff;
+            margin: 10px 0;
+        }
+        
+        .passed {
+            color: #0f0;
+        }
+        
+        .failed {
+            color: #f00;
+        }
+        
+        .details {
+            margin-top: 20px;
+        }
+        
+        .question-result {
+            background: rgba(20, 20, 20, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #333;
+        }
+        
+        .correct {
+            border-left-color: #0f0;
+        }
+        
+        .incorrect {
+            border-left-color: #f00;
+        }
+        
+        .skipped {
+            border-left-color: #ff0;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            margin-top: 20px;
+            background: rgba(0, 255, 255, 0.2);
+            color: #0ff;
+            border: 1px solid #0ff;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 15px #0ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Результаты теста</h1>
+        
+        <div class="result-summary">
+            <div id="resultText"></div>
+            <div class="score" id="scoreText"></div>
+            <div id="detailsText"></div>
+        </div>
+        
+        <div class="details" id="questionsDetails"></div>
+        
+        <a href="main.html" class="btn">Вернуться на главную</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Получаем результаты из localStorage
+            const results = JSON.parse(localStorage.getItem('lawTestManualResults'));
+            
+            if (!results) {
+                document.getElementById('resultText').textContent = "Результаты не найдены.";
+                return;
+            }
+            
+            // Отображаем сводку
+            document.getElementById('resultText').textContent = 
+                `Тест: ${results.testType}`;
+                
+            document.getElementById('scoreText').textContent = 
+                `${results.correctAnswers} из ${results.totalQuestions}`;
+                
+            document.getElementById('scoreText').className += 
+                results.percentage >= 50 ? ' passed' : ' failed';
+                
+            document.getElementById('detailsText').innerHTML = 
+                `Правильных ответов: <strong>${results.correctAnswers}</strong><br>
+                 Пропущено: <strong>${results.skippedAnswers}</strong><br>
+                 Процент правильных: <strong>${results.percentage}%</strong><br>
+                 Дата прохождения: <strong>${results.date}</strong>`;
+            
+            // Отображаем детали по каждому вопросу
+            const detailsContainer = document.getElementById('questionsDetails');
+            results.answers.forEach((answer, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-result';
+                
+                if (answer.userAnswer === "Пропущено") {
+                    questionDiv.className += ' skipped';
+                } else if (answer.isCorrect) {
+                    questionDiv.className += ' correct';
+                } else {
+                    questionDiv.className += ' incorrect';
+                }
+                
+                questionDiv.innerHTML = `
+                    <p><strong>Вопрос ${index + 1}:</strong> ${answer.question}</p>
+                    <p>Ваш ответ: <strong>${answer.userAnswer}</strong></p>
+                    ${answer.userAnswer !== "Пропущено" 
+                        ? `<p>Правильный ответ: <strong>${answer.correctAnswer}</strong></p>` 
+                        : ''}
+                    <p>${answer.explanation || ''}</p>
+                `;
+                
+                detailsContainer.appendChild(questionDiv);
+            });
+        });
+    </script>
+</body>
+</html>
