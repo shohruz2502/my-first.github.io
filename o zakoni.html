@@ -213,7 +213,7 @@
             <button class="btn btn-next" id="nextBtn" disabled>Далее</button>
         </div>
         
-        <a href="result.html" class="btn btn-submit" id="submitBtn" style="display: none; text-decoration: none;">Завершить тест</a>
+        <a href="rezult.html" class="btn btn-submit" id="submitBtn" style="display: none; text-decoration: none;">Завершить тест</a>
     </div>
 
     <script>
@@ -696,12 +696,15 @@
                 }))
             };
             
-            // Сохраняем результаты в localStorage
-            localStorage.setItem('lawTestResults', JSON.stringify(testResults));
+            // Сохраняем результаты
+            localStorage.setItem('testResults', JSON.stringify(testResults));
             
-            // Активируем переход по ссылке
-            document.getElementById('submitBtn').click();
+            // Переходим на страницу результатов
+            window.location.href = 'result.html';
         }
+
+        // Инициализация теста
+        document.getElementById('submitBtn').addEventListener('click', submitTest);
         
         // Запуск теста при загрузке страницы
         document.addEventListener('DOMContentLoaded', initTest);
